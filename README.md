@@ -17,19 +17,35 @@ Replace this paragraph with your own summary of what your version does.
 
 ## How The System Works
 
-Explain your design in plain language.
+Real-world music recommendation systems, like those used by Spotify or YouTube, typically combine collaborative filtering (analyzing what similar users like) with content-based filtering (matching song features to user preferences) and sometimes incorporate machine learning models trained on vast amounts of listening data. My version will prioritize a simple content-based approach, focusing on matching song attributes directly to user preferences to create transparent, explainable recommendations without relying on external user data.
 
-Some prompts to answer:
+The Song objects in my simulation will use the following features:
+- genre (e.g., pop, rock, lofi)
+- mood (e.g., happy, chill, intense)
+- energy (a float from 0 to 1 indicating intensity)
+- tempo_bpm (beats per minute as a float)
+- valence (a float from 0 to 1 indicating positivity)
+- danceability (a float from 0 to 1 indicating suitability for dancing)
+- acousticness (a float from 0 to 1 indicating acoustic vs. electronic)
 
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
-- What information does your `UserProfile` store
-- How does your `Recommender` compute a score for each song
-- How do you choose which songs to recommend
+The UserProfile objects will store:
+- favorite_genre (the user's preferred genre)
+- favorite_mood (the user's preferred mood)
+- target_energy (a float from 0 to 1 for desired energy level)
+- likes_acoustic (a boolean indicating preference for acoustic songs)
 
-You can include a simple diagram or bullet list if helpful.
+### Algorithm Recipe
+The recommender computes a score for each song using a weighted combination of feature matches:
+- **Genre Match**: 2.0 points if the song's genre exactly matches the user's favorite_genre, 0 otherwise.
+- **Mood Match**: 1.5 points if the song's mood exactly matches the user's favorite_mood, 0 otherwise.
+- **Energy Similarity**: 1.0 - |song.energy - user.target_energy| (ranges from 0 to 1, higher for closer matches).
+- **Acoustic Preference**: 1.0 if (song.acousticness > 0.5) matches user.likes_acoustic, 0 otherwise.
+- **Additional Features**: Bonus 0.5 points each for valence and danceability within 0.2 of ideal values (e.g., high valence for happy moods), and tempo within 20 BPM of a target (e.g., 120 BPM for moderate pace).
 
----
+Total score = sum of all components. Songs are ranked by descending score, and the top K are recommended with explanations listing the matching reasons.
+
+### Potential Biases
+This system might over-prioritize exact genre and mood matches, potentially ignoring great songs that align well on energy or acousticness but differ in categorical features. It could also exhibit bias toward songs with extreme energy levels if the target_energy is high, and may not account for subjective interpretations of "mood" or "valence" across different listeners.
 
 ## Getting Started
 
