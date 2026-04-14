@@ -222,8 +222,6 @@ Examples:
 A few sentences about what you learned:
 
 
-## 10. Screenshot
-<img width="1245" height="754" alt="Screenshot 2026-04-14 at 11 36 12 AM" src="https://github.com/user-attachments/assets/0c2c1938-c0ee-4d37-975f-2eaf60733638" />
 
 
 - What surprised you about how your system behaved
